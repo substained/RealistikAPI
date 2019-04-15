@@ -14,6 +14,9 @@ import (
 	"zxq.co/ripple/rippleapi/app/v1"
 	"zxq.co/ripple/rippleapi/app/websockets"
 	"zxq.co/ripple/rippleapi/common"
+	
+	//Add-on
+	"github.com/Hazuki-san/hmrapi"
 )
 
 var (
@@ -146,6 +149,21 @@ func Start(conf common.Conf, dbO *sqlx.DB) *fhr.Router {
 		r.POSTMethod("/api/v1/tokens/fix_privileges", v1.TokenFixPrivilegesPOST,
 			common.PrivilegeManageUser, common.PrivilegeAPIMeta)
 	}
+	
+	// Ainu & Homura API
+	{
+		r.Method("/api/v1/clans", v1.ClansGET)
+		r.Method("/api/v1/clans/members", v1.ClanMembersGET)
+		r.Method("/api/v1/clans/stats", v1.TotalClanStatsGET)
+		r.Method("/api/v1/clans/stats/all", v1.AllClanStatsGET)
+		r.Method("/api/v1/clans/getinvite", v1.ClanInviteGET)
+		r.Method("/api/v1/clans/isclan", v1.IsInClanGET)
+		r.Method("/api/v1/hmrapi/topdonors", hmrapi.TopDonorsGET)
+		r.Method("/api/v1/hmrapi/top_beatmaps", hmrapi.Beatmaps5GET)
+		r.Method("/api/v1/hmrapi/top_plays", hmrapi.TopPlaysGET)
+		r.Method("/api/v1/users/get_activity", hmrapi.LogsGET)
+	}
+
 
 	// Websocket API
 	{
