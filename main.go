@@ -31,12 +31,12 @@ func init() {
 var db *sqlx.DB
 
 func main() {
-	err := agplwarning.Warn("ripple", "Ripple API")
+	err := agplwarning.Warn("ripple", "Ainu & Homura API")
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Print("Ripple API")
+	fmt.Print("Homura API")
 	if Version != "" {
 		fmt.Print("; git commit hash: ", Version)
 	}
