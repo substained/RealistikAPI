@@ -55,7 +55,7 @@ func ClansGET(md common.MethodData) common.CodeMessager {
 
 type clanMembersData struct {
 	common.ResponseBase
-	Members []userNotFullResponseLmao `json:"members"`
+	Members []userNotFullResponse `json:"members"`
 }
 
 // get total stats of clan. later.
