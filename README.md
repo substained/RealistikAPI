@@ -23,3 +23,4 @@ The not-making-it-RESTful was the biggest sin of the API. In itself, the API was
 This API has been added many feature in it and the listed below is the addon for this API!
 
 * Clans
+* Top played beatmaps
