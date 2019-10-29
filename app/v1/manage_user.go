@@ -31,9 +31,12 @@ func UserManageSetAllowedPOST(md common.MethodData) common.CodeMessager {
 	if data.Allowed == 0 {
 		banDatetime = time.Now().Unix()
 		privsSet = "privileges = (privileges & ~3)"
-	} else {
+	} else if data.Allowed == 1 {
 		banDatetime = 0
 		privsSet = "privileges = (privileges | 3)"
+	} else if data.Allowed == 2 {
+		banDatetime = time.Now().Unix()
+		privsSet = "privileges = (privileges | 2) & (privileges & ~1)"
 	}
 	_, err := md.DB.Exec("UPDATE users SET "+privsSet+", ban_datetime = ? WHERE id = ?", banDatetime, data.UserID)
 	if err != nil {
@@ -116,6 +119,7 @@ func UserEditPOST(md common.MethodData) common.CodeMessager {
 	}
 
 	var isBanned bool
+	var isSilenced bool
 	if data.Privileges != nil {
 		// If we want to modify privileges other than Normal/Public, we need to have
 		// the right privilege ourselves and AdminManageUsers won't suffice.
@@ -168,6 +172,7 @@ func UserEditPOST(md common.MethodData) common.CodeMessager {
 	if data.SilenceInfo != nil && md.User.UserPrivileges&common.AdminPrivilegeSilenceUsers != 0 {
 		q += "silence_end = ?, silence_reason = ?,\n"
 		args = append(args, time.Time(data.SilenceInfo.End).Unix(), data.SilenceInfo.Reason)
+		isSilenced = true
 	}
 	if data.ResetUserpage {
 		statsQ += "userpage_content = '',\n"
@@ -193,7 +198,7 @@ func UserEditPOST(md common.MethodData) common.CodeMessager {
 		}
 	}
 
-	if isBanned {
+	if isBanned || isSilenced {
 		if err := updateBanBancho(md.R, data.ID); err != nil {
 			md.Err(err)
 			return Err500
@@ -268,6 +273,10 @@ func WipeUserPOST(md common.MethodData) common.CodeMessager {
 			playcount_MODE = 0, avg_accuracy_MODE = 0, total_hits_MODE = 0, level_MODE = 0, pp_MODE = 0
 			WHERE id = ?`, "MODE", modesToReadable[mode], -1,
 		), data.ID)
+		if err != nil {
+			md.Err(err)
+		}
+		_, err = tx.Exec("DELETE FROM users_beatmap_playcount WHERE user_id = ? AND game_mode = ?", data.ID, mode)
 		if err != nil {
 			md.Err(err)
 		}
