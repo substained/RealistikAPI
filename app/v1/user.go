@@ -260,10 +260,7 @@ func RelaxUserFullGET(md common.MethodData) common.CodeMessager {
 SELECT
 	users.id, users.username, users.register_datetime, users.privileges, users.latest_activity,
 
-	rx_stats.username_aka, rx_stats.country, rx_stats.play_style, rx_stats.favourite_mode,
-
-	rx_stats.custom_badge_icon, rx_stats.custom_badge_name, rx_stats.can_custom_badge,
-	rx_stats.show_custom_badge,
+	rx_stats.username_aka, rx_stats.country,
 
 	rx_stats.ranked_score_std, rx_stats.total_score_std, rx_stats.playcount_std,
 	rx_stats.replays_watched_std, rx_stats.total_hits_std,
