@@ -19,6 +19,25 @@ type userScoresResponse struct {
 	Scores []userScore `json:"scores"`
 }
 
+const relaxScoreSelectBase = `
+SELECT
+	scores_relax.id, scores_relax.beatmap_md5, scores_relax.score,
+	scores_relax.max_combo, scores_relax.full_combo, scores_relax.mods,
+	scores_relax.300_count, scores_relax.100_count, scores_relax.50_count,
+	scores_relax.gekis_count, scores_relax.katus_count, scores_relax.misses_count,
+	scores_relax.time, scores_relax.play_mode, scores_relax.accuracy, scores_relax.pp,
+	scores_relax.completed,
+
+	beatmaps.beatmap_id, beatmaps.beatmapset_id, beatmaps.beatmap_md5,
+	beatmaps.song_name, beatmaps.ar, beatmaps.od, beatmaps.difficulty_std,
+	beatmaps.difficulty_taiko, beatmaps.difficulty_ctb, beatmaps.difficulty_mania,
+	beatmaps.max_combo, beatmaps.hit_length, beatmaps.ranked,
+	beatmaps.ranked_status_freezed, beatmaps.latest_update
+FROM scores_relax
+INNER JOIN beatmaps ON beatmaps.beatmap_md5 = scores_relax.beatmap_md5
+INNER JOIN users ON users.id = scores_relax.userid
+`
+
 const userScoreSelectBase = `
 SELECT
 	scores.id, scores.beatmap_md5, scores.score,
@@ -50,6 +69,19 @@ func UserScoresBestGET(md common.MethodData) common.CodeMessager {
 	if getMode(md.Query("mode")) != "ctb" {
 		mc += " AND scores.pp > 0"
 	}
+	
+	if common.Int(md.Query("rx")) != 0 {
+		mc = strings.Replace(mc, "scores.", "scores_relax.", 1)
+		return scoresPuts(md, fmt.Sprintf(
+		`WHERE
+			scores_relax.completed = '3'
+			AND %s
+			%s
+			AND `+md.User.OnlyUserPublic(true)+`
+		ORDER BY scores_relax.pp DESC, scores_relax.score DESC %s`,
+		wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
+	), param)
+	} else {
 	return scoresPuts(md, fmt.Sprintf(
 		`WHERE
 			scores.completed = '3'
@@ -59,6 +91,7 @@ func UserScoresBestGET(md common.MethodData) common.CodeMessager {
 		ORDER BY scores.pp DESC, scores.score DESC %s`,
 		wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 	), param)
+	}
 }
 
 // UserScoresRecentGET retrieves an user's latest scores.
