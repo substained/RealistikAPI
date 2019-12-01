@@ -109,7 +109,7 @@ func UserScoresRecentGET(md common.MethodData) common.CodeMessager {
 				%s
 				AND `+md.User.OnlyUserPublic(true)+`
 			ORDER BY scores_relax.id DESC %s`,
-			wc, genModeClause(md), common.Paginate(md.Query("p"), md.Query("l"), 100),
+			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 		), param)
 	} else {
 	return scoresPuts(md, fmt.Sprintf(
