@@ -69,7 +69,7 @@ func LeaderboardGET(md common.MethodData) common.CodeMessager {
 
 	key := "ripple:leaderboard:" + m
 	if common.Int(md.Query("rx")) != 0 {
-		key = "ripple:relaxboard:" + m
+		key = "ripple:leaderboard_relax:" + m
 	}
 	if md.Query("country") != "" {
 		key += ":" + md.Query("country")
