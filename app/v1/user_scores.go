@@ -20,42 +20,42 @@ type userScoresResponse struct {
 }
 
 const relaxScoreSelectBase = `
-SELECT
-	scores_relax.id, scores_relax.beatmap_md5, scores_relax.score,
-	scores_relax.max_combo, scores_relax.full_combo, scores_relax.mods,
-	scores_relax.300_count, scores_relax.100_count, scores_relax.50_count,
-	scores_relax.gekis_count, scores_relax.katus_count, scores_relax.misses_count,
-	scores_relax.time, scores_relax.play_mode, scores_relax.accuracy, scores_relax.pp,
-	scores_relax.completed,
+		SELECT
+			scores_relax.id, scores_relax.beatmap_md5, scores_relax.score,
+			scores_relax.max_combo, scores_relax.full_combo, scores_relax.mods,
+			scores_relax.300_count, scores_relax.100_count, scores_relax.50_count,
+			scores_relax.gekis_count, scores_relax.katus_count, scores_relax.misses_count,
+			scores_relax.time, scores_relax.play_mode, scores_relax.accuracy, scores_relax.pp,
+			scores_relax.completed,
 
-	beatmaps.beatmap_id, beatmaps.beatmapset_id, beatmaps.beatmap_md5,
-	beatmaps.song_name, beatmaps.ar, beatmaps.od, beatmaps.difficulty_std,
-	beatmaps.difficulty_taiko, beatmaps.difficulty_ctb, beatmaps.difficulty_mania,
-	beatmaps.max_combo, beatmaps.hit_length, beatmaps.ranked,
-	beatmaps.ranked_status_freezed, beatmaps.latest_update
-FROM scores_relax
-INNER JOIN beatmaps ON beatmaps.beatmap_md5 = scores_relax.beatmap_md5
-INNER JOIN users ON users.id = scores_relax.userid
-`
+			beatmaps.beatmap_id, beatmaps.beatmapset_id, beatmaps.beatmap_md5,
+			beatmaps.song_name, beatmaps.ar, beatmaps.od, beatmaps.difficulty_std,
+			beatmaps.difficulty_taiko, beatmaps.difficulty_ctb, beatmaps.difficulty_mania,
+			beatmaps.max_combo, beatmaps.hit_length, beatmaps.ranked,
+			beatmaps.ranked_status_freezed, beatmaps.latest_update
+		FROM scores_relax
+		INNER JOIN beatmaps ON beatmaps.beatmap_md5 = scores_relax.beatmap_md5
+		INNER JOIN users ON users.id = scores_relax.userid
+		`
 
 const userScoreSelectBase = `
-SELECT
-	scores.id, scores.beatmap_md5, scores.score,
-	scores.max_combo, scores.full_combo, scores.mods,
-	scores.300_count, scores.100_count, scores.50_count,
-	scores.gekis_count, scores.katus_count, scores.misses_count,
-	scores.time, scores.play_mode, scores.accuracy, scores.pp,
-	scores.completed,
+		SELECT
+			scores.id, scores.beatmap_md5, scores.score,
+			scores.max_combo, scores.full_combo, scores.mods,
+			scores.300_count, scores.100_count, scores.50_count,
+			scores.gekis_count, scores.katus_count, scores.misses_count,
+			scores.time, scores.play_mode, scores.accuracy, scores.pp,
+			scores.completed,
 
-	beatmaps.beatmap_id, beatmaps.beatmapset_id, beatmaps.beatmap_md5,
-	beatmaps.song_name, beatmaps.ar, beatmaps.od, beatmaps.difficulty_std,
-	beatmaps.difficulty_taiko, beatmaps.difficulty_ctb, beatmaps.difficulty_mania,
-	beatmaps.max_combo, beatmaps.hit_length, beatmaps.ranked,
-	beatmaps.ranked_status_freezed, beatmaps.latest_update
-FROM scores
-INNER JOIN beatmaps ON beatmaps.beatmap_md5 = scores.beatmap_md5
-INNER JOIN users ON users.id = scores.userid
-`
+			beatmaps.beatmap_id, beatmaps.beatmapset_id, beatmaps.beatmap_md5,
+			beatmaps.song_name, beatmaps.ar, beatmaps.od, beatmaps.difficulty_std,
+			beatmaps.difficulty_taiko, beatmaps.difficulty_ctb, beatmaps.difficulty_mania,
+			beatmaps.max_combo, beatmaps.hit_length, beatmaps.ranked,
+			beatmaps.ranked_status_freezed, beatmaps.latest_update
+		FROM scores
+		INNER JOIN beatmaps ON beatmaps.beatmap_md5 = scores.beatmap_md5
+		INNER JOIN users ON users.id = scores.userid
+		`
 
 // UserScoresBestGET retrieves the best scores of an user, sorted by PP if
 // mode is standard and sorted by ranked score otherwise.
@@ -64,33 +64,31 @@ func UserScoresBestGET(md common.MethodData) common.CodeMessager {
 	if cm != nil {
 		return *cm
 	}
+	
 	mc := genModeClause(md)
 	// For all modes that have PP, we leave out 0 PP scores.
-	if getMode(md.Query("mode")) != "ctb" {
-		mc += " AND scores.pp > 0"
-	}
-	
+
 	if common.Int(md.Query("rx")) != 0 {
 		mc = strings.Replace(mc, "scores.", "scores_relax.", 1)
 		return relaxPuts(md, fmt.Sprintf(
-		`WHERE
-			scores_relax.completed = '3'
-			AND %s
-			%s
-			AND `+md.User.OnlyUserPublic(true)+`
-		ORDER BY scores_relax.pp DESC, scores_relax.score DESC %s`,
-		wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
-	), param)
+			`WHERE
+				scores_relax.completed = '3'
+				AND %s
+				%s
+				AND `+md.User.OnlyUserPublic(true)+`
+			ORDER BY scores_relax.pp DESC, scores_relax.score DESC %s`,
+			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
+		), param)
 	} else {
-	return scoresPuts(md, fmt.Sprintf(
-		`WHERE
-			scores.completed = '3'
-			AND %s
-			%s
-			AND `+md.User.OnlyUserPublic(true)+`
-		ORDER BY scores.pp DESC, scores.score DESC %s`,
-		wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
-	), param)
+		return scoresPuts(md, fmt.Sprintf(
+			`WHERE
+				scores.completed = '3'
+				AND %s
+				%s
+				AND `+md.User.OnlyUserPublic(true)+`
+			ORDER BY scores.pp DESC, scores.score DESC %s`,
+			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
+		), param)
 	}
 }
 
@@ -112,19 +110,19 @@ func UserScoresRecentGET(md common.MethodData) common.CodeMessager {
 			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 		), param)
 	} else {
-	return scoresPuts(md, fmt.Sprintf(
-		`WHERE
-			%s
-			%s
-			AND `+md.User.OnlyUserPublic(true)+`
-		ORDER BY scores.id DESC %s`,
-		wc, genModeClause(md), common.Paginate(md.Query("p"), md.Query("l"), 100),
-	), param)
+		return scoresPuts(md, fmt.Sprintf(
+			`WHERE
+				%s
+				%s
+				AND `+md.User.OnlyUserPublic(true)+`
+			ORDER BY scores.id DESC %s`,
+			wc, genModeClause(md), common.Paginate(md.Query("p"), md.Query("l"), 100),
+		), param)
 	}
 }
 
-func relaxPuts(md common.MethodData, whereClause string, params ...interface{}) common.CodeMessager {
-	rows, err := md.DB.Query(relaxScoreSelectBase+whereClause, params...)
+func scoresPuts(md common.MethodData, whereClause string, params ...interface{}) common.CodeMessager {
+	rows, err := md.DB.Query(userScoreSelectBase+whereClause, params...)
 	if err != nil {
 		md.Err(err)
 		return Err500
@@ -172,9 +170,8 @@ func relaxPuts(md common.MethodData, whereClause string, params ...interface{}) 
 	return r
 }
 
-
-func scoresPuts(md common.MethodData, whereClause string, params ...interface{}) common.CodeMessager {
-	rows, err := md.DB.Query(userScoreSelectBase+whereClause, params...)
+func relaxPuts(md common.MethodData, whereClause string, params ...interface{}) common.CodeMessager {
+	rows, err := md.DB.Query(relaxScoreSelectBase+whereClause, params...)
 	if err != nil {
 		md.Err(err)
 		return Err500
