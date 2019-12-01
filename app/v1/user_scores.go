@@ -72,7 +72,7 @@ func UserScoresBestGET(md common.MethodData) common.CodeMessager {
 	
 	if common.Int(md.Query("rx")) != 0 {
 		mc = strings.Replace(mc, "scores.", "scores_relax.", 1)
-		return scoresPuts(md, fmt.Sprintf(
+		return relaxPuts(md, fmt.Sprintf(
 		`WHERE
 			scores_relax.completed = '3'
 			AND %s
@@ -100,6 +100,18 @@ func UserScoresRecentGET(md common.MethodData) common.CodeMessager {
 	if cm != nil {
 		return *cm
 	}
+	mc := genModeClause(md)
+	if common.Int(md.Query("rx")) != 0 {
+		mc = strings.Replace(mc, "scores.", "scores_relax.", 1)
+		return scoresPuts(md, fmt.Sprintf(
+			`WHERE
+				%s
+				%s
+				AND `+md.User.OnlyUserPublic(true)+`
+			ORDER BY scores_relax.id DESC %s`,
+			wc, genModeClause(md), common.Paginate(md.Query("p"), md.Query("l"), 100),
+		), param)
+	} else {
 	return scoresPuts(md, fmt.Sprintf(
 		`WHERE
 			%s
@@ -108,6 +120,7 @@ func UserScoresRecentGET(md common.MethodData) common.CodeMessager {
 		ORDER BY scores.id DESC %s`,
 		wc, genModeClause(md), common.Paginate(md.Query("p"), md.Query("l"), 100),
 	), param)
+	}
 }
 
 func scoresPuts(md common.MethodData, whereClause string, params ...interface{}) common.CodeMessager {
