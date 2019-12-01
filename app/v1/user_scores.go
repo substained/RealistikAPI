@@ -103,7 +103,7 @@ func UserScoresRecentGET(md common.MethodData) common.CodeMessager {
 	mc := genModeClause(md)
 	if common.Int(md.Query("rx")) != 0 {
 		mc = strings.Replace(mc, "scores.", "scores_relax.", 1)
-		return scoresPuts(md, fmt.Sprintf(
+		return relaxPuts(md, fmt.Sprintf(
 			`WHERE
 				%s
 				%s
