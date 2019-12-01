@@ -260,25 +260,25 @@ func RelaxUserFullGET(md common.MethodData) common.CodeMessager {
 SELECT
 	users.id, users.username, users.register_datetime, users.privileges, users.latest_activity,
 
-	user_stats.username_aka, user_stats.country, user_stats.play_style, user_stats.favourite_mode,
+	users_stats.username_aka, users_stats.country, users_stats.play_style, users_stats.favourite_mode,
 
-	user_stats.custom_badge_icon, user_stats.custom_badge_name, user_stats.can_custom_badge,
-	user_stats.show_custom_badge,
+	users_stats.custom_badge_icon, users_stats.custom_badge_name, users_stats.can_custom_badge,
+	users_stats.show_custom_badge,
 
 	rx_stats.ranked_score_std, rx_stats.total_score_std, rx_stats.playcount_std,
-	user_stats.replays_watched_std, user_stats.total_hits_std,
+	users_stats.replays_watched_std, users_stats.total_hits_std,
 	rx_stats.avg_accuracy_std, rx_stats.pp_std, rx_stats.playtime_std,
 
 	rx_stats.ranked_score_taiko, rx_stats.total_score_taiko, rx_stats.playcount_taiko,
-	user_stats.replays_watched_taiko, user_stats.total_hits_taiko,
+	users_stats.replays_watched_taiko, users_stats.total_hits_taiko,
 	rx_stats.avg_accuracy_taiko, rx_stats.pp_taiko, rx_stats.playtime_taiko,
 
 	rx_stats.ranked_score_ctb, rx_stats.total_score_ctb, rx_stats.playcount_ctb,
-	user_stats.replays_watched_ctb, user_stats.total_hits_ctb,
+	users_stats.replays_watched_ctb, users_stats.total_hits_ctb,
 	rx_stats.avg_accuracy_ctb, rx_stats.pp_ctb, rx_stats.playtime_ctb,
 
 	rx_stats.ranked_score_mania, rx_stats.total_score_mania, rx_stats.playcount_mania,
-	user_stats.replays_watched_mania, user_stats.total_hits_mania,
+	users_stats.replays_watched_mania, users_stats.total_hits_mania,
 	rx_stats.avg_accuracy_mania, rx_stats.pp_mania, rx_stats.playtime_mania,
 
 	users.silence_reason, users.silence_end,
