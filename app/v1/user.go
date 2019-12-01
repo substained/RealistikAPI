@@ -285,6 +285,8 @@ SELECT
 	users.notes, users.ban_datetime, users.email
 
 FROM users
+LEFT JOIN users_stats
+ON users.id=users_stats.id
 LEFT JOIN rx_stats
 ON users.id=rx_stats.id
 WHERE ` + whereClause + ` AND ` + md.User.OnlyUserPublic(true) + `
