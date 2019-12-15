@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuthailand/api/common"
 )
 
 type mostPlayedBeatmap struct {

@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuthailand/api/common"
 )
 
 var rn = rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -67,24 +67,35 @@ var kaomojis = [...]string{
 }
 
 var randomSentences = [...]string{
-	"Proudly sponsored by Kirotuso!",
+	"osu!thailand? What is that?",
 	"The brace is on fire!",
 	"deverupa ga daisuki!",
 	"It works!!!!",
 	"Feelin' groovy!",
-	"sudo rm -rf /",
-	"Hi! I'm Flowey! Flowey the flower!",
-	"Ripple devs are actually cats",
-	"Support Howl's fund for buying a power supply for his SSD!",
-	"Superman dies",
-	"PP when?",
-	"RWC hype",
-	"I'd just like to interject for a moment.",
-	"Running on an apple pie!",
-	":thinking:",
-	"The total entropy of an isolated system can only increase over time",
-	"Where are my testicles, Summer?",
-	"Why don't you ask the smartest people in the universe? Oh yeah, you can't. They blew up.",
+	"sudo rm -rf / (wait... did i forgot something here?)",
+	"Momma, I don't wanna die",
+	"Aoba haven't watch anime for 1 year",
+	"I don't have money to buy new laptop",
+	"This API is skidded :OMEGALUL:",
+	"Relax server, yes.",
+	"AWC hype Pepega",
+	"Daisuki~",
+	"Ainu Client is a big meme? nahh",
+	":thonk:",
+	"If you love me, then say so!",
+	"Recommend me something.",
+	"Hi, this is Aoba stuff",
+	"Despacito 2019 v2",
+	"ilyt, are you reading this?",
+	"jackson... i'm sorry... for everything...",
+	"Simon, u broke relax profile ~Aoba 2019",
+	"All we had to do was follow the damn train, CJ.",
+	"Free supporter for Thai people!",
+	"fake ass 5* map ~Aoffy 2019",
+	"im bad at osu ~Aoba 2019",
+	"WHAT ARE YOU DOING?!",
+	"Are you reading this btw?",
+	"donate me pls im poor",
 }
 
 func surpriseMe() string {

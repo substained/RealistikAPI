@@ -4,7 +4,7 @@ import (
 	"strings"
 	"strconv"
 	"fmt"
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuthailand/api/common"
 	"time"
 	"gopkg.in/thehowl/go-osuapi.v1"
 	"zxq.co/x/getrank"

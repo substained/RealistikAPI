@@ -9,14 +9,15 @@ import (
 	"github.com/getsentry/raven-go"
 	"github.com/jmoiron/sqlx"
 	"gopkg.in/redis.v5"
-	"zxq.co/ripple/rippleapi/app/internals"
-	"zxq.co/ripple/rippleapi/app/peppy"
-	v1 "zxq.co/ripple/rippleapi/app/v1"
-	"zxq.co/ripple/rippleapi/app/websockets"
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuthailand/api/app/internals"
+	"github.com/osuthailand/api/app/peppy"
+	v1 "github.com/osuthailand/api/app/v1"
+	"github.com/osuthailand/api/app/websockets"
+	"github.com/osuthailand/api/common"
 	
 	//Add-on
 	"github.com/Hazuki-san/hmrapi"
+	"github.com/denmarkistrash/mitsuha"
 )
 
 var (
@@ -94,6 +95,7 @@ func Start(conf common.Conf, dbO *sqlx.DB) *fhr.Router {
 		r.Method("/api/v1/users", v1.UsersGET)
 		r.Method("/api/v1/users/whatid", v1.UserWhatsTheIDGET)
 		r.Method("/api/v1/users/full", v1.UserFullGET)
+		r.Method("/api/v1/users/rxfull", v1.RelaxUserFullGET)
 		r.Method("/api/v1/users/achievements", v1.UserAchievementsGET)
 		r.Method("/api/v1/users/most_played", v1.UserMostPlayedGET)
 		r.Method("/api/v1/users/userpage", v1.UserUserpageGET)
@@ -153,6 +155,7 @@ func Start(conf common.Conf, dbO *sqlx.DB) *fhr.Router {
 	
 	// Ainu & Homura API
 	{
+		r.Method("/api/v1/users/followers", mitsuha.FollowersGetResponse)
 		r.Method("/api/v1/clans", v1.ClansGET)
 		r.Method("/api/v1/clans/members", v1.ClanMembersGET)
 		r.Method("/api/v1/clans/stats", v1.TotalClanStatsGET)
@@ -163,6 +166,7 @@ func Start(conf common.Conf, dbO *sqlx.DB) *fhr.Router {
 		r.Method("/api/v1/hmrapi/top_beatmaps", hmrapi.Beatmaps5GET)
 		r.Method("/api/v1/hmrapi/top_plays", hmrapi.TopPlaysGET)
 		r.Method("/api/v1/users/get_activity", hmrapi.LogsGET)
+		r.Method("/api/v1/mitsuha/followers_friends", mitsuha.FollowersGET)
 	}
 
 

@@ -3,7 +3,7 @@ package hmrapi
 import (
 	"database/sql"
 	"strconv"
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuthailand/api/common"
 )
 
 type userData1 struct {

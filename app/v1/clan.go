@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuthailand/api/common"
 )
 
 type singleClan struct {

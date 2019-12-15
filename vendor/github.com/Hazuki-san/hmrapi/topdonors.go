@@ -1,7 +1,7 @@
 package hmrapi
 
 import (
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuthailand/api/common"
 )
 
 type userData struct {
