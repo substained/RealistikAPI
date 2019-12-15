@@ -25,3 +25,4 @@ This API has been added many feature in it and the listed below is the addon for
 * Clans
 * Top played beatmaps
 * Relax profile and leaderboard
+* Followers
