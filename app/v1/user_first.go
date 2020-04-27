@@ -1,5 +1,5 @@
 // Code taken from osu!Akatsuki
-
+/*
 package v1
 
 import (
@@ -129,3 +129,4 @@ func UserFirstGET(md common.MethodData) common.CodeMessager {
 	r.ResponseBase.Code = 200
 	return r
 }
+*/
