@@ -129,7 +129,7 @@ func UserScoresRecentGET(md common.MethodData) common.CodeMessager {
 		return *cm
 	}
 	mc := genModeClause(md)
-	if common.Int(md.Query("rx")) != 0 {
+	if common.Int(md.Query("rx")) == 1 {
 		mc = strings.Replace(mc, "scores.", "scores_relax.", 1)
 		return relaxPuts(md, fmt.Sprintf(
 			`WHERE
@@ -137,6 +137,17 @@ func UserScoresRecentGET(md common.MethodData) common.CodeMessager {
 				%s
 				AND `+md.User.OnlyUserPublic(true)+`
 			ORDER BY scores_relax.id DESC %s`,
+			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
+		), param)
+	}
+	if common.Int(md.Query("rx")) == 2 {
+		mc = strings.Replace(mc, "scores.", "scores_ap.", 1)
+		return relaxPuts(md, fmt.Sprintf(
+			`WHERE
+				%s
+				%s
+				AND `+md.User.OnlyUserPublic(true)+`
+			ORDER BY scores_ap.id DESC %s`,
 			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 		), param)
 	} else {
