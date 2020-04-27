@@ -103,7 +103,7 @@ func Start(conf common.Conf, dbO *sqlx.DB) *fhr.Router {
 		r.Method("/api/v1/users/lookup", v1.UserLookupGET)
 		r.Method("/api/v1/users/scores/best", v1.UserScoresBestGET)
 		r.Method("/api/v1/users/scores/recent", v1.UserScoresRecentGET)
-		r.Method("/api/v1/users/scores/first", v1.UserFirstGET) // Thanks Akatsuki!
+		//r.Method("/api/v1/users/scores/first", v1.UserFirstGET) // Thanks Akatsuki!
 		r.Method("/api/v1/badges", v1.BadgesGET)
 		r.Method("/api/v1/badges/members", v1.BadgeMembersGET)
 		r.Method("/api/v1/beatmaps", v1.BeatmapGET)
@@ -154,8 +154,6 @@ func Start(conf common.Conf, dbO *sqlx.DB) *fhr.Router {
 		r.POSTMethod("/api/v1/tokens/fix_privileges", v1.TokenFixPrivilegesPOST,
 			common.PrivilegeManageUser, common.PrivilegeAPIMeta)
 	}
-	
-	// Ainu & Homura API
 	{
 		r.Method("/api/v1/users/followers", mitsuha.FollowersGetResponse)
 		r.Method("/api/v1/clans", v1.ClansGET)
