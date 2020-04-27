@@ -142,7 +142,7 @@ func UserScoresRecentGET(md common.MethodData) common.CodeMessager {
 	}
 	if common.Int(md.Query("rx")) == 2 {
 		mc = strings.Replace(mc, "scores.", "scores_ap.", 1)
-		return relaxPuts(md, fmt.Sprintf(
+		return autoPuts(md, fmt.Sprintf(
 			`WHERE
 				%s
 				%s
