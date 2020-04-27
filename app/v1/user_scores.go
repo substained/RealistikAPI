@@ -109,8 +109,7 @@ func UserScoresBestGET(md common.MethodData) common.CodeMessager {
 			ORDER BY scores_ap.pp DESC, scores_ap.score DESC %s`,
 			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 		), param)
-	}
-	else {
+	} else {
 		return scoresPuts(md, fmt.Sprintf(
 			`WHERE
 				scores.completed = '3'
