@@ -144,7 +144,7 @@ func LeaderboardGET(md common.MethodData) common.CodeMessager {
 				u.ChosenMode.CountryLeaderboardRank = i
 			}
 		}
-		else if common.Int(md.Query("rx")) == 2 {
+		if common.Int(md.Query("rx")) == 2 {
 			if i := autoPosition(md.R, m, u.ID); i != nil {
 				u.ChosenMode.GlobalLeaderboardRank = i
 			}
