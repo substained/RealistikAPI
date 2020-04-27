@@ -7,15 +7,15 @@ import (
 	"syscall"
 
 	"zxq.co/ripple/agplwarning"
-	"github.com/osuthailand/api/app"
-	"github.com/osuthailand/api/beatmapget"
-	"github.com/osuthailand/api/common"
+	"github.com/RealistikOsu/api/app"
+	"github.com/RealistikOsu/api/beatmapget"
+	"github.com/RealistikOsu/api/common"
 	"zxq.co/ripple/schiavolib"
 	// Golint pls dont break balls
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/serenize/snaker"
-	"gopkg.in/thehowl/go-osuapi.v1"
+	"github.com/RealistikOsu/gopkg.in/vendor/thehowl/go-osuapi.v1"
 )
 
 // Version is the git hash of the application. Do not edit. This is
