@@ -110,7 +110,7 @@ func UserScoresBestGET(md common.MethodData) common.CodeMessager {
 			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 		), param)
 	}
-	if common.Int(md.Query("rx")) != 2 && common.Int(md.Query("rx")) != 1 {
+	else {
 		return scoresPuts(md, fmt.Sprintf(
 			`WHERE
 				scores.completed = '3'
@@ -120,9 +120,6 @@ func UserScoresBestGET(md common.MethodData) common.CodeMessager {
 			ORDER BY scores.pp DESC, scores.score DESC %s`,
 			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 		), param)
-	}
-	else {
-		return "a"
 	}
 }
 
