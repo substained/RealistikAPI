@@ -15,7 +15,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/serenize/snaker"
-	"thehowl/go-osuapi.v1"
+	"gopkg.in/thehowl/go-osuapi.v1"
 )
 
 // Version is the git hash of the application. Do not edit. This is
