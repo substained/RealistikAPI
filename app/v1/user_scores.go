@@ -97,7 +97,8 @@ func UserScoresBestGET(md common.MethodData) common.CodeMessager {
 			ORDER BY scores_relax.pp DESC, scores_relax.score DESC %s`,
 			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 		), param)
-	} else if common.Int(md.Query("rx")) == 2 {
+	} 
+	if common.Int(md.Query("rx")) == 2 {
 		mc = strings.Replace(mc, "scores.", "scores_ap.", 1)
 		return autoPuts(md, fmt.Sprintf(
 			`WHERE
@@ -109,7 +110,7 @@ func UserScoresBestGET(md common.MethodData) common.CodeMessager {
 			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 		), param)
 	}
-	else {
+	if common.Int(md.Query("rx")) != 2 && common.Int(md.Query("rx")) != 1 {
 		return scoresPuts(md, fmt.Sprintf(
 			`WHERE
 				scores.completed = '3'
