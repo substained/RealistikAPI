@@ -121,6 +121,9 @@ func UserScoresBestGET(md common.MethodData) common.CodeMessager {
 			wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 		), param)
 	}
+	else {
+		return "a"
+	}
 }
 
 // UserScoresRecentGET retrieves an user's latest scores.
