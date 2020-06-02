@@ -1,7 +1,7 @@
 package hmrapi
 
 import (
-	"github.com/RealistikOsu/api/common"
+	"github.com/RealistikOsu/RealistikAPI/common"
 )
 
 type userData struct {

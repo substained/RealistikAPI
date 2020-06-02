@@ -3,7 +3,7 @@ package hmrapi
 import (
 	"database/sql"
 	"strconv"
-	"github.com/RealistikOsu/api/common"
+	"github.com/RealistikOsu/RealistikAPI/common"
 )
 
 type userData1 struct {

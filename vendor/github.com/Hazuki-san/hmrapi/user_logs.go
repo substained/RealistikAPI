@@ -4,7 +4,7 @@ import (
 	"strings"
 	"strconv"
 	"fmt"
-	"github.com/RealistikOsu/api/common"
+	"github.com/RealistikOsu/RealistikAPI/common"
 	"time"
 	"gopkg.in/thehowl/go-osuapi.v1"
 	"zxq.co/x/getrank"
