@@ -11,7 +11,7 @@ var rn = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 var kaomojis = [...]string{
 	"o7",
-	""
+	"",
 }
 
 var randomSentences = [...]string{
