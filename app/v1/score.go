@@ -83,8 +83,7 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 	where.Where(` scores.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
 		genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
 	where.Params = where.Params[:len(where.Params)-1]
-	switch {
-	case md.Query("rx") == "0"://vanilla
+	if common.Int(md.Query("rx")) == 0 { 
 		rows, err := md.DB.Query(`
 SELECT
 	scores.id, scores.beatmap_md5, scores.score,
@@ -100,25 +99,27 @@ FROM scores
 INNER JOIN users ON users.id = scores.userid
 INNER JOIN users_stats ON users_stats.id = scores.userid
 `+where.Clause, where.Params...)
-	case md.Query("rx") == "1": //rx
+	}
+	if common.Int(md.Query("rx")) == 1 { 
 		rows, err := md.DB.Query(`
-SELECT
-	scores_rx.id, scores_rx.beatmap_md5, scores_rx.score,
-	scores_rx.max_combo, scores_rx.full_combo, scores_rx.mods,
-	scores_rx.300_count, scores_rx.100_count, scores_rx.50_count,
-	scores_rx.gekis_count, scores_rx.katus_count, scores_rx.misses_count,
-	scores_rx.time, scores_rx.play_mode, scores_rx.accuracy, scores_rx.pp,
-	scores_rx.completed,
-
-	users.id, users.username, users.register_datetime, users.privileges,
-	users.latest_activity, users_stats.username_aka, users_stats.country
-FROM scores_rx
-INNER JOIN users ON users.id = scores_rx.userid
-INNER JOIN users_stats ON users_stats.id = scores_rx.userid
+		SELECT
+		scores_rx.id, scores_rx.beatmap_md5, scores_rx.score,
+		scores_rx.max_combo, scores_rx.full_combo, scores_rx.mods,
+		scores_rx.300_count, scores_rx.100_count, scores_rx.50_count,
+		scores_rx.gekis_count, scores_rx.katus_count, scores_rx.misses_count,
+		scores_rx.time, scores_rx.play_mode, scores_rx.accuracy, scores_rx.pp,
+		scores_rx.completed,
+	
+		users.id, users.username, users.register_datetime, users.privileges,
+		users.latest_activity, users_stats.username_aka, users_stats.country
+	FROM scores_rx
+	INNER JOIN users ON users.id = scores_rx.userid
+	INNER JOIN users_stats ON users_stats.id = scores_rx.userid
 `+where.Clause, where.Params...)
-	case md.Query("rx") == "2": //ap
-	rows, err := md.DB.Query(`
-SELECT
+	}
+	if common.Int(md.Query("rx")) == 2 { 
+		rows, err := md.DB.Query(`
+		SELECT
 	scores_ap.id, scores_ap.beatmap_md5, scores_ap.score,
 	scores_ap.max_combo, scores_ap.full_combo, scores_ap.mods,
 	scores_ap.300_count, scores_ap.100_count, scores_ap.50_count,
@@ -131,22 +132,6 @@ SELECT
 FROM scores_ap
 INNER JOIN users ON users.id = scores_ap.userid
 INNER JOIN users_stats ON users_stats.id = scores_ap.userid
-`+where.Clause, where.Params...)
-	default: //compatibillity
-		rows, err := md.DB.Query(`
-SELECT
-scores.id, scores.beatmap_md5, scores.score,
-scores.max_combo, scores.full_combo, scores.mods,
-scores.300_count, scores.100_count, scores.50_count,
-scores.gekis_count, scores.katus_count, scores.misses_count,
-scores.time, scores.play_mode, scores.accuracy, scores.pp,
-scores.completed,
-
-users.id, users.username, users.register_datetime, users.privileges,
-users.latest_activity, users_stats.username_aka, users_stats.country
-FROM scores
-INNER JOIN users ON users.id = scores.userid
-INNER JOIN users_stats ON users_stats.id = scores.userid
 `+where.Clause, where.Params...)
 	}
 	
