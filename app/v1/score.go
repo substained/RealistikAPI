@@ -83,6 +83,8 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 	where.Where(` scores.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
 		genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
 	where.Params = where.Params[:len(where.Params)-1]
+	rows := [];
+	err := nil;
 	if common.Int(md.Query("rx")) == 0 { 
 		rows, err := md.DB.Query(`
 SELECT
