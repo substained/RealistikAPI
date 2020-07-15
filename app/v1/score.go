@@ -69,7 +69,6 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 		}
 		where.Where("beatmap_md5 = ?", md5)
 	}
-	where.In("scores.id", pm("id")...)
 
 	sort := common.Sort(md, common.SortConfiguration{
 		Default: "scores.pp DESC, scores.score DESC",
@@ -80,8 +79,45 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 		return ErrMissingField("must specify at least one queried item")
 	}
 
-	where.Where(` scores.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
-		genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
+	//prob should be somewhere else but eh
+	switch {
+	case common.Int(md.Query("rx")) == 1:
+		where.In("scores_rx.id", pm("id")...)
+
+		sort := common.Sort(md, common.SortConfiguration{
+			Default: "scores_rx.pp DESC, scores_rx.score DESC",
+			Table:   "scores_rx",
+			Allowed: []string{"pp", "score", "accuracy", "id"},
+		})
+		if where.Clause == "" {
+			return ErrMissingField("must specify at least one queried item")
+		}
+
+		where.Where(` scores_rx.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
+			genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
+		break;
+	case common.Int(md.Query("rx")) == 2:
+		where.In("scores_ap.id", pm("id")...)
+
+		sort := common.Sort(md, common.SortConfiguration{
+			Default: "scores_ap.pp DESC, scores_ap.score DESC",
+			Table:   "scores_ap",
+			Allowed: []string{"pp", "score", "accuracy", "id"},
+		})
+		if where.Clause == "" {
+			return ErrMissingField("must specify at least one queried item")
+		}
+
+		where.Where(` scores_ap.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
+			genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
+		break;
+	default:
+		where.In("scores.id", pm("id")...)
+		where.Where(` scores.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
+			genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
+	}
+
+	
 	where.Params = where.Params[:len(where.Params)-1]
 	Query := "";
 	if common.Int(md.Query("rx")) == 0 { 
