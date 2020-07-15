@@ -83,10 +83,9 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 	where.Where(` scores.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
 		genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
 	where.Params = where.Params[:len(where.Params)-1]
-	rows := [];
-	err := nil;
+	Query := "";
 	if common.Int(md.Query("rx")) == 0 { 
-		rows, err := md.DB.Query(`
+		Query =`
 SELECT
 	scores.id, scores.beatmap_md5, scores.score,
 	scores.max_combo, scores.full_combo, scores.mods,
@@ -100,10 +99,10 @@ SELECT
 FROM scores
 INNER JOIN users ON users.id = scores.userid
 INNER JOIN users_stats ON users_stats.id = scores.userid
-`+where.Clause, where.Params...)
+`
 	}
 	if common.Int(md.Query("rx")) == 1 { 
-		rows, err := md.DB.Query(`
+		Query = `
 		SELECT
 		scores_rx.id, scores_rx.beatmap_md5, scores_rx.score,
 		scores_rx.max_combo, scores_rx.full_combo, scores_rx.mods,
@@ -117,10 +116,10 @@ INNER JOIN users_stats ON users_stats.id = scores.userid
 	FROM scores_rx
 	INNER JOIN users ON users.id = scores_rx.userid
 	INNER JOIN users_stats ON users_stats.id = scores_rx.userid
-`+where.Clause, where.Params...)
+`
 	}
 	if common.Int(md.Query("rx")) == 2 { 
-		rows, err := md.DB.Query(`
+		Query = `
 		SELECT
 	scores_ap.id, scores_ap.beatmap_md5, scores_ap.score,
 	scores_ap.max_combo, scores_ap.full_combo, scores_ap.mods,
@@ -134,9 +133,9 @@ INNER JOIN users_stats ON users_stats.id = scores.userid
 FROM scores_ap
 INNER JOIN users ON users.id = scores_ap.userid
 INNER JOIN users_stats ON users_stats.id = scores_ap.userid
-`+where.Clause, where.Params...)
+`
 	}
-	
+	rows, err := md.DB.Query(Query+where.Clause, where.Params...);
 	if err != nil {
 		md.Err(err)
 		return Err500
