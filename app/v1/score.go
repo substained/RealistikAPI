@@ -334,7 +334,7 @@ func getMode(m string) string {
 }
 
 func genModeClause(md common.MethodData) string {
-	return genModeClauseColumn(md, "scores.play_mode")
+	return genModeClauseColumn(md, "play_mode")
 }
 
 func genModeClauseColumn(md common.MethodData, column string) string {
