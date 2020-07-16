@@ -78,10 +78,12 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 	if where.Clause == "" {
 		return ErrMissingField("must specify at least one queried item")
 	}
+    
+    rx_ap := common.Int(md.Query("rx"))
 
 	//prob should be somewhere else but eh
 	switch {
-	case common.Int(md.Query("rx")) == 1:
+	case rx_ap == 1:
 		where.In("scores_rx.id", pm("id")...)
 
 		sort := common.Sort(md, common.SortConfiguration{
@@ -95,8 +97,8 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 
 		where.Where(` scores_rx.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
 			genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
-		break;
-	case common.Int(md.Query("rx")) == 2:
+		break
+	case rx_ap == 2:
 		where.In("scores_ap.id", pm("id")...)
 
 		sort := common.Sort(md, common.SortConfiguration{
@@ -110,7 +112,7 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 
 		where.Where(` scores_ap.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
 			genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
-		break;
+		break
 	default:
 		where.In("scores.id", pm("id")...)
 		where.Where(` scores.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
@@ -119,25 +121,10 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 
 	
 	where.Params = where.Params[:len(where.Params)-1]
-	Query := "";
-	if common.Int(md.Query("rx")) == 0 { 
-		Query =`
-SELECT
-	scores.id, scores.beatmap_md5, scores.score,
-	scores.max_combo, scores.full_combo, scores.mods,
-	scores.300_count, scores.100_count, scores.50_count,
-	scores.gekis_count, scores.katus_count, scores.misses_count,
-	scores.time, scores.play_mode, scores.accuracy, scores.pp,
-	scores.completed,
-
-	users.id, users.username, users.register_datetime, users.privileges,
-	users.latest_activity, users_stats.username_aka, users_stats.country
-FROM scores
-INNER JOIN users ON users.id = scores.userid
-INNER JOIN users_stats ON users_stats.id = scores.userid
-`
-	}
-	if common.Int(md.Query("rx")) == 1 { 
+	// this isnt python dash
+    // Query := ""
+    var Query string
+    if rx_ap == 1 { 
 		Query = `
 		SELECT
 		scores_rx.id, scores_rx.beatmap_md5, scores_rx.score,
@@ -153,8 +140,7 @@ INNER JOIN users_stats ON users_stats.id = scores.userid
 	INNER JOIN users ON users.id = scores_rx.userid
 	INNER JOIN users_stats ON users_stats.id = scores_rx.userid
 `
-	}
-	if common.Int(md.Query("rx")) == 2 { 
+	} else if rx_ap == 2 { 
 		Query = `
 		SELECT
 	scores_ap.id, scores_ap.beatmap_md5, scores_ap.score,
@@ -170,8 +156,25 @@ FROM scores_ap
 INNER JOIN users ON users.id = scores_ap.userid
 INNER JOIN users_stats ON users_stats.id = scores_ap.userid
 `
-	}
-	rows, err := md.DB.Query(Query+where.Clause, where.Params...);
+	} else {
+        Query =`
+SELECT
+	scores.id, scores.beatmap_md5, scores.score,
+	scores.max_combo, scores.full_combo, scores.mods,
+	scores.300_count, scores.100_count, scores.50_count,
+	scores.gekis_count, scores.katus_count, scores.misses_count,
+	scores.time, scores.play_mode, scores.accuracy, scores.pp,
+	scores.completed,
+
+	users.id, users.username, users.register_datetime, users.privileges,
+	users.latest_activity, users_stats.username_aka, users_stats.country
+FROM scores
+INNER JOIN users ON users.id = scores.userid
+INNER JOIN users_stats ON users_stats.id = scores.userid
+`
+    }
+    fmt.Println(Query)
+	rows, err := md.DB.Query(Query+where.Clause, where.Params...)
 	if err != nil {
 		md.Err(err)
 		return Err500
