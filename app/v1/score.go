@@ -82,8 +82,8 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
     rx_ap := common.Int(md.Query("rx"))
 
 	//prob should be somewhere else but eh
-	switch {
-	case rx_ap == 1:
+	switch rx_ap {
+	case 1:
 		where.In("scores_rx.id", pm("id")...)
 
 		sort := common.Sort(md, common.SortConfiguration{
@@ -98,7 +98,7 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 		where.Where(` scores_rx.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
 			genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
 		break
-	case rx_ap == 2:
+	case 2:
 		where.In("scores_ap.id", pm("id")...)
 
 		sort := common.Sort(md, common.SortConfiguration{
