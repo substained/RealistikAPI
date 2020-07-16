@@ -31,7 +31,7 @@ func init() {
 var db *sqlx.DB
 
 func main() {
-	err := agplwarning.Warn("ripple", "The RealistikOsu API")
+	err := agplwarning.Warn("ripple", "The RealistikOsu API | test")
 	if err != nil {
 		fmt.Println(err)
 	}
