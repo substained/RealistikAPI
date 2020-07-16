@@ -84,18 +84,18 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
 	//prob should be somewhere else but eh
 	switch rx_ap {
 	case 1:
-		where.In("scores_rx.id", pm("id")...)
+		where.In("scores_relax.id", pm("id")...)
 
 		sort := common.Sort(md, common.SortConfiguration{
-			Default: "scores_rx.pp DESC, scores_rx.score DESC",
-			Table:   "scores_rx",
+			Default: "scores_relax.pp DESC, scores_relax.score DESC",
+			Table:   "scores_relax",
 			Allowed: []string{"pp", "score", "accuracy", "id"},
 		})
 		if where.Clause == "" {
 			return ErrMissingField("must specify at least one queried item")
 		}
 
-		where.Where(` scores_rx.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
+		where.Where(` scores_relax.completed = '3' AND `+md.User.OnlyUserPublic(false)+` `+
 			genModeClause(md)+` `+sort+common.Paginate(md.Query("p"), md.Query("l"), 100), "FIF")
 		break
 	case 2:
@@ -127,18 +127,18 @@ func ScoresGET(md common.MethodData) common.CodeMessager {
     if rx_ap == 1 { 
 		Query = `
 		SELECT
-		scores_rx.id, scores_rx.beatmap_md5, scores_rx.score,
-		scores_rx.max_combo, scores_rx.full_combo, scores_rx.mods,
-		scores_rx.300_count, scores_rx.100_count, scores_rx.50_count,
-		scores_rx.gekis_count, scores_rx.katus_count, scores_rx.misses_count,
-		scores_rx.time, scores_rx.play_mode, scores_rx.accuracy, scores_rx.pp,
-		scores_rx.completed,
+		scores_relax.id, scores_relax.beatmap_md5, scores_relax.score,
+		scores_relax.max_combo, scores_relax.full_combo, scores_relax.mods,
+		scores_relax.300_count, scores_relax.100_count, scores_relax.50_count,
+		scores_relax.gekis_count, scores_relax.katus_count, scores_relax.misses_count,
+		scores_relax.time, scores_relax.play_mode, scores_relax.accuracy, scores_relax.pp,
+		scores_relax.completed,
 	
 		users.id, users.username, users.register_datetime, users.privileges,
 		users.latest_activity, users_stats.username_aka, users_stats.country
-	FROM scores_rx
-	INNER JOIN users ON users.id = scores_rx.userid
-	INNER JOIN users_stats ON users_stats.id = scores_rx.userid
+	FROM scores_relax
+	INNER JOIN users ON users.id = scores_relax.userid
+	INNER JOIN users_stats ON users_stats.id = scores_relax.userid
 `
 	} else if rx_ap == 2 { 
 		Query = `
