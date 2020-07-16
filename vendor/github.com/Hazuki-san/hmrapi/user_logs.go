@@ -57,7 +57,7 @@ DESC LIMIT 5
 `, id, mode, strconv.Itoa(int(time.Now().Unix())-2592000)))
 	if err != nil {
 		md.Err(err)
-		return common.SimpleResponse(500, "Uh oh... Seems like Aoba did something bad to API... Please try again! If it's broken... Please tell me in the Discord!")
+		return common.SimpleResponse(500, "Oh god Realistik broke something again didnt he")
 	}
 
 	var response Massive
