@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/RealistikOsu/RealistikAPI/common"
+	"github.com/substained/api/common"
 	"gopkg.in/thehowl/go-osuapi.v1"
 )
 

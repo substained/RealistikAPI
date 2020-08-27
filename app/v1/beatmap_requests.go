@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/RealistikOsu/RealistikAPI/common"
-	"github.com/RealistikOsu/RealistikAPI/limit"
+	"github.com/substained/api/common"
+	"github.com/substained/api/limit"
 )
 
 type rankRequestsStatusResponse struct {

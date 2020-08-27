@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"github.com/RealistikOsu/RealistikAPI/common"
+	"github.com/substained/api/common"
 )
 
 type mostPlayedBeatmap struct {

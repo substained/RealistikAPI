@@ -3,7 +3,7 @@ package v1
 import (
 	"database/sql"
 
-	"github.com/RealistikOsu/RealistikAPI/common"
+	"github.com/substained/api/common"
 )
 
 type difficulty struct {
