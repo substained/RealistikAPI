@@ -256,7 +256,7 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 		latest_activity, rx_stats.username_aka,
 		
 		rx_stats.country, rx_stats.user_color,
-		rx_stats.ranked_score_std, rx_stats.total_score_std, rx_stats.pp_std, rx_stats.playcount_std, rx_stats.replays_watched_std, rx_stats.total_hits_std,
+		rx_stats.ranked_score_std, rx_stats.total_score_std, rx_stats.pp_std, rx_stats.playcount_std, rx_stats.total_hits_std,
 		rx_stats.ranked_score_taiko, rx_stats.total_score_taiko, rx_stats.pp_taiko, rx_stats.playcount_taiko, rx_stats.replays_watched_taiko, rx_stats.total_hits_taiko,
 		rx_stats.ranked_score_ctb, rx_stats.total_score_ctb, rx_stats.pp_ctb, rx_stats.playcount_ctb, rx_stats.replays_watched_ctb, rx_stats.total_hits_ctb,
 		rx_stats.ranked_score_mania, rx_stats.total_score_mania, rx_stats.pp_mania, rx_stats.playcount_mania, rx_stats.replays_watched_mania, rx_stats.total_hits_mania
