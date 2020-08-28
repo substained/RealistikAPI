@@ -101,6 +101,7 @@ func userPutsMulti(md common.MethodData) common.CodeMessager {
 			"donor_expire",
 			"latest_activity",
 			"silence_end",
+			"global_leaderboard_rank",
 		},
 		Default: "id ASC",
 		Table:   "users",
